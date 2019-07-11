@@ -16,9 +16,72 @@
   <body>
     <div id="NoData" class="container-fluid">
 	<h1>Directions</h1>
-		<p>Open powershell and cd to your runeline directory. Once in your runelite directory go to the desired account and to its screenshot folder. Once in this folder do the following command. <br/><samp>dir | clip</samp><br/> This will copy the contents of that folder to your clipboard. Now paste these contents into the website. All account details are client side only. There is no server side data being collected.</p> 
-		<textarea class="form-control" id="UserData" rows="15"></textarea> <br/>
-		<input class="btn btn-primary" type="button" id="supplyData" value="SubmitCode">
+		<p>Open powershell and cd to your runeline directory. Once in your runelite directory go to the desired account and to its screenshot folder. Once in this folder do the following command. <br/><samp>dir | clip</samp><br/> This will copy the contents of that folder to your clipboard. Now paste these contents into the website. All account details are client side only. There is no server side data being collected.</p> 		
+		<div class="row">
+			<div class="col">
+				<textarea class="form-control" id="UserData" rows="15"></textarea> <br/>
+				<input class="btn btn-primary" type="button" id="supplyData" value="Generate Line Graph">
+			</div>
+			<div class="col">
+				<table class="table">
+					<tr>
+						<td><input type="checkbox" id="Attack"></input>Attack</td>
+						<td><input type="checkbox" id="Hitpoints" >Hitpoints</td>
+						<td><input type="checkbox" id="Mining">Mining</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="Strength"></input>Strength</td>
+						<td><input type="checkbox" id="Agility">Agility</td>
+						<td><input type="checkbox" id="Smithing" >Smithing</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="Defence" ></input>Defence</td>
+						<td><input type="checkbox" id="Herblore" >Herblore</td>
+						<td><input type="checkbox" id="Fishing" >Fishing</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="Ranged" ></input>Ranged</td>
+						<td><input type="checkbox" id="Thieving" >Thieving</td>
+						<td><input type="checkbox" id="Cooking" >Cooking</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="Prayer" ></input>Prayer</td>
+						<td><input type="checkbox" id="Crafting" >Crafting</td>
+						<td><input type="checkbox" id="Firemaking" >Firemaking</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="Magic" ></input>Magic</td>
+						<td><input type="checkbox" id="Fletching" >Fletching</td>
+						<td><input type="checkbox" id="Woodcutting" >Woodcutting</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="Runecraft"></input>Runecrafting</td>
+						<td><input type="checkbox" id="Slayer" >Slayer</td>
+						<td><input type="checkbox" id="Farming" >Farming</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="Construction" ></input>Construction</td>
+						<td><input type="checkbox" id="Hunter" >Hunter</td>
+						<td>Total (Coming Soon)</td>
+					</tr>
+				</table>
+				<input class="btn btn-primary" type="button" id="all" value="Select All (Warning Slow)">
+				<input class="btn btn-primary" type="button" id="none" value="Select None">
+				<input class="btn btn-primary" type="button" id="support" value="Support">
+				<input class="btn btn-primary" type="button" id="artisan" value="Artisan">
+				<input class="btn btn-primary" type="button" id="gathering" value="Gathering">
+				<input class="btn btn-primary" type="button" id="combat" value="Combat">
+				
+				<div class="btn-group btn-group-toggle" data-toggle="buttons">
+				  <label class="btn btn-secondary active">
+					<input type="radio" name="options" id="level" checked> Use Level
+				  </label>
+				  <label class="btn btn-secondary">
+					<input type="radio" name="options" id="xp"> Use XP (coming soon)
+				  </label>
+				</div>
+			</div>
+		</div>
 	
 	</div>
 	<div id="WithData" class="container-fluid">
@@ -32,18 +95,17 @@
     
 	<script>
 		
-		var skills = ['Attack','Strength','Defence','Ranged','Prayer','Magic','Runecraft','Hitpoints','Crafting','Mining','Smithing','Fishing','Cooking','Firemaking','Woodcutting','Agility','Herblore','Thieving','Fletching','Slayer','Farming','Construction','Hunter'];
+		var skills = [];
 	
 		function drawChart(rawData) {
 			var data = google.visualization.arrayToDataTable(rawData);
 
 			var options = {
 				chart: {
-				  title: 'Box Office Earnings in First Two Weeks of Opening',
-				  subtitle: 'in millions of dollars (USD)'
+				  title: 'Runescape Levels Over Time'
 				},
-				width: 900,
-				height: 500
+				width: $(window).width() * .95,
+				height: $(window).height() * .95
 			  };
 
 
@@ -52,8 +114,116 @@
 			chart.draw(data, google.charts.Line.convertOptions(options));
 		};
 		
+		function loadSkills()
+		{
+			//clear out array first
+			skills = [];
+			
+			if($("#Attack").prop("checked"))
+			{
+				skills.push("Attack");
+			}
+			if($("#Strength").prop("checked"))
+			{
+				skills.push("Strength");
+			}
+			if($("#Defence").prop("checked"))
+			{
+				skills.push("Defence");
+			}
+			if($("#Ranged").prop("checked"))
+			{
+				skills.push("Ranged");
+			}
+			if($("#Prayer").prop("checked"))
+			{
+				skills.push("Prayer");
+			}
+			if($("#Magic").prop("checked"))
+			{
+				skills.push("Magic");
+			}
+			if($("#Runecraft").prop("checked"))
+			{
+				skills.push("Runecraft");
+			}
+			if($("#Hitpoints").prop("checked"))
+			{
+				skills.push("Hitpoints");
+			}
+			if($("#Crafting").prop("checked"))
+			{
+				skills.push("Crafting");
+			}
+			if($("#Mining").prop("checked"))
+			{
+				skills.push("Mining");
+			}
+			if($("#Smithing").prop("checked"))
+			{
+				skills.push("Smithing");
+			}
+			if($("#Fishing").prop("checked"))
+			{
+				skills.push("Fishing");
+			}
+			if($("#Cooking").prop("checked"))
+			{
+				skills.push("Cooking");
+			}
+			if($("#Firemaking").prop("checked"))
+			{
+				skills.push("Firemaking");
+			}
+			if($("#Woodcutting").prop("checked"))
+			{
+				skills.push("Woodcutting");
+			}
+			if($("#Agility").prop("checked"))
+			{
+				skills.push("Agility");
+			}
+			if($("#Herblore").prop("checked"))
+			{
+				skills.push("Herblore");
+			}
+			if($("#Thieving").prop("checked"))
+			{
+				skills.push("Thieving");
+			}
+			if($("#Fletching").prop("checked"))
+			{
+				skills.push("Fletching");
+			}
+			if($("#Slayer").prop("checked"))
+			{
+				skills.push("Slayer");
+			}
+			if($("#Farming").prop("checked"))
+			{
+				skills.push("Farming");
+			}
+			if($("#Construction").prop("checked"))
+			{
+				skills.push("Construction");
+			}
+			if($("#Hunter").prop("checked"))
+			{
+				skills.push("Hunter");
+			}
+			if(jQuery.isEmptyObject(skills))
+			{
+				skills.push("Runecraft");			
+			}
+			//for when we add total skill tracking
+			//if($("#Total").prop("checked"))
+			//{
+			//	skills.push("Total");
+			//}
+		}
 		function parseLine(incLine)
 		{
+			//try catch here is to ignore any errors
 			try
 			{
 				var splitted = incLine.split(' ');
@@ -67,22 +237,21 @@
 				console.log(err);
 			}			
 		}
-		
-		function searchStringInArray (str, strArray) {
-			for (var j=0; j<strArray.length; j++) {
-				if (strArray[j].match(str)) return j;
-			}
-			return -1;
-		}
-		
+				
+		//when fully loaded get charts ready and hide blank chart
 		$( document ).ready(function() {
 			google.charts.load('current', {'packages':['line']});
 			$("#WithData").hide();
 		});
 		$( "#supplyData" ).click(function() {
+			//Swap between views and clean up spaces in data
 			$("#NoData").hide();
 			$("#WithData").show();
 			$('#UserData').val($('#UserData').val().replace(/ +(?= )/g,''));
+			
+			loadSkills();
+			
+			//Do some basic filtering for lines that only have selected skills and explicitly remove the quests
 			var lines = $('#UserData').val().split('\n');
 			var parsedData = "";
 			var table = [];
@@ -94,23 +263,39 @@
 					parsedData = lines[i] + "\n" + parsedData;
 					table.push(parseLine(lines[i]));
 				}
-			}
-			
-			$('#UserData').val(parsedData);			
+			}			
+
+			//sort the parsed lines based on timestamp
 			table.sort(function(a,b) {
 				return a[0] - b[0];		
 			});
 					
-			
+			//create first row for data headers and second row for initial account guess
 			var graphableData = [];
-			graphableData.push(['Time', 'Attack','Strength','Defence','Ranged','Prayer','Magic','Runecraft','Hitpoints','Crafting','Mining','Smithing','Fishing','Cooking','Firemaking','Woodcutting','Agility','Herblore','Thieving','Fletching','Slayer','Farming','Construction','Hunter']);
-			graphableData.push([new Date(table[0][0] - 6000000),1,1,1,1,1,1,1,10,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
+			var firstRow = [];
+			firstRow.push('Time');
+			var secondRow = [];
+			secondRow.push(new Date(table[0][0] - 6000000));
+			for(var i = 0; i < skills.length; i++)
+			{
+				firstRow.push(skills[i]);
+				if(skills[i] != 'Hitpoints')
+				{
+					secondRow.push(1);
+				}
+				else
+				{
+					secondRow.push(10);
+				}
+			}
 			
-			console.log(graphableData);
+			graphableData.push(firstRow);
+			graphableData.push(secondRow);	
 			
+			//restructuring of data to fit into line chart
 			for(var i = 0; i < table.length - 2;i++)
 			{
-				var skillIndex = searchStringInArray(table[i][1],skills) + 1;
+				var skillIndex = jQuery.inArray(table[i][1], skills) + 1;
 				var temp = graphableData[i + 1].slice();
 				temp[skillIndex] = table[i][2];
 				temp[0] = table[i][0];
@@ -121,11 +306,82 @@
 			google.charts.setOnLoadCallback(drawChart(graphableData));
 			
 		});
+		
+		//go from graphs back to data entry
 		$( "#revertData" ).click(function() {
 			$("#NoData").show();
 			$("#WithData").hide();
 		});
-
+		
+		function checkAll(OnorOff)
+		{
+			$("#Attack").prop("checked",OnorOff);
+			$("#Hitpoints").prop("checked",OnorOff);
+			$("#Mining").prop("checked",OnorOff);
+			$("#Strength").prop("checked",OnorOff);
+			$("#Agility").prop("checked",OnorOff);
+			$("#Smithing").prop("checked",OnorOff);
+			$("#Defence").prop("checked",OnorOff);
+			$("#Herblore").prop("checked",OnorOff);
+			$("#Fishing").prop("checked",OnorOff);
+			$("#Ranged").prop("checked",OnorOff);
+			$("#Thieving").prop("checked",OnorOff);
+			$("#Cooking").prop("checked",OnorOff);
+			$("#Prayer").prop("checked",OnorOff);
+			$("#Crafting").prop("checked",OnorOff);
+			$("#Firemaking").prop("checked",OnorOff);
+			$("#Magic").prop("checked",OnorOff);
+			$("#Fletching").prop("checked",OnorOff);
+			$("#Woodcutting").prop("checked",OnorOff);
+			$("#Runecraft").prop("checked",OnorOff);
+			$("#Slayer").prop("checked",OnorOff);
+			$("#Farming").prop("checked",OnorOff);
+			$("#Construction").prop("checked",OnorOff);
+			$("#Hunter").prop("checked",OnorOff);
+		}
+		
+		$( "#all" ).click(function() {
+				checkAll(true);
+		});
+		$( "#none" ).click(function() {
+				checkAll(false);
+		});
+		$( "#support" ).click(function() {
+				$("#none").click();
+				$("#Agility").prop("checked", true);
+				$("#Thieving").prop("checked", true);
+				$("#Slayer").prop("checked", true);
+		});
+		$( "#artisan" ).click(function() {
+				$("#none").click();
+				$("#Smithing").prop("checked", true);
+				$("#Cooking").prop("checked", true);
+				$("#Construction").prop("checked", true);
+				$("#Fletching").prop("checked", true);
+				$("#Firemaking").prop("checked", true);
+				$("#Herblore").prop("checked", true);
+				$("#Crafting").prop("checked", true);
+				$("#Runecraft").prop("checked", true);
+		});
+		$( "#gathering" ).click(function() {
+				$("#none").click();
+				$("#Woodcutting").prop("checked", true);
+				$("#Mining").prop("checked", true);
+				$("#Fishing").prop("checked", true);
+				$("#Hunter").prop("checked", true);
+				$("#Farming").prop("checked", true);
+		});
+		$( "#combat" ).click(function() {
+				$("#none").click();
+				$("#Attack").prop("checked", true);
+				$("#Strength").prop("checked", true);
+				$("#Defence").prop("checked", true);
+				$("#Magic").prop("checked", true);
+				$("#Prayer").prop("checked", true);
+				$("#Hitpoints").prop("checked", true);
+				$("#Ranged").prop("checked", true);
+		});
+				
 
 	</script>
   </body>
