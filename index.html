@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+    <title>RuneLite Stat Grapher</title>
+  </head>
+  <body>
+    <div id="NoData" class="container-fluid">
+	<h1>Directions</h1>
+		<p>Open powershell and cd to your runeline directory. Once in your runelite directory go to the desired account and to its screenshot folder. Once in this folder do the following command. <br/><samp>dir | clip</samp><br/> This will copy the contents of that folder to your clipboard. Now paste these contents into the website. All account details are client side only. There is no server side data being collected.</p> 
+		<textarea class="form-control" id="UserData" rows="15"></textarea> <br/>
+		<input class="btn btn-primary" type="button" id="supplyData" value="SubmitCode">
+	
+	</div>
+	<div id="WithData" class="container-fluid">
+		<div>
+			<div id="curve"> </div>
+			<input class="btn btn-primary" type="button" id="revertData" value="Go Back">
+		</div>
+	
+	</div>
+	
+    
+	<script>
+		
+		var skills = ['Attack','Strength','Defence','Ranged','Prayer','Magic','Runecraft','Hitpoints','Crafting','Mining','Smithing','Fishing','Cooking','Firemaking','Woodcutting','Agility','Herblore','Thieving','Fletching','Slayer','Farming','Construction','Hunter'];
+	
+		function drawChart(rawData) {
+			var data = google.visualization.arrayToDataTable(rawData);
+
+			var options = {
+				chart: {
+				  title: 'Box Office Earnings in First Two Weeks of Opening',
+				  subtitle: 'in millions of dollars (USD)'
+				},
+				width: 900,
+				height: 500
+			  };
+
+
+			var chart = new google.charts.Line(($('#curve')[0]));
+
+			chart.draw(data, google.charts.Line.convertOptions(options));
+		};
+		
+		function parseLine(incLine)
+		{
+			try
+			{
+				var splitted = incLine.split(' ');
+				var date = new Date(splitted[1] + " " + splitted[2]+ " " + splitted[3]);
+				var skill = splitted[5].split("(")[0];
+				var level = splitted[5].split("(")[1].split(")")[0];
+				return [date, skill, level];
+			}
+			catch(err)
+			{
+				console.log(err);
+			}			
+		}
+		
+		function searchStringInArray (str, strArray) {
+			for (var j=0; j<strArray.length; j++) {
+				if (strArray[j].match(str)) return j;
+			}
+			return -1;
+		}
+		
+		$( document ).ready(function() {
+			google.charts.load('current', {'packages':['line']});
+			$("#WithData").hide();
+		});
+		$( "#supplyData" ).click(function() {
+			$("#NoData").hide();
+			$("#WithData").show();
+			$('#UserData').val($('#UserData').val().replace(/ +(?= )/g,''));
+			var lines = $('#UserData').val().split('\n');
+			var parsedData = "";
+			var table = [];
+			
+			for(var i = 0; i < lines.length; i++)
+			{
+				if(new RegExp(skills.join("|")).test(lines[i]) && !lines[i].includes("Quest"))
+				{
+					parsedData = lines[i] + "\n" + parsedData;
+					table.push(parseLine(lines[i]));
+				}
+			}
+			
+			$('#UserData').val(parsedData);			
+			table.sort(function(a,b) {
+				return a[0] - b[0];		
+			});
+					
+			
+			var graphableData = [];
+			graphableData.push(['Time', 'Attack','Strength','Defence','Ranged','Prayer','Magic','Runecraft','Hitpoints','Crafting','Mining','Smithing','Fishing','Cooking','Firemaking','Woodcutting','Agility','Herblore','Thieving','Fletching','Slayer','Farming','Construction','Hunter']);
+			graphableData.push([new Date(table[0][0] - 6000000),1,1,1,1,1,1,1,10,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
+			
+			console.log(graphableData);
+			
+			for(var i = 0; i < table.length - 2;i++)
+			{
+				var skillIndex = searchStringInArray(table[i][1],skills) + 1;
+				var temp = graphableData[i + 1].slice();
+				temp[skillIndex] = table[i][2];
+				temp[0] = table[i][0];
+				graphableData.push(temp);
+			}
+			
+			
+			google.charts.setOnLoadCallback(drawChart(graphableData));
+			
+		});
+		$( "#revertData" ).click(function() {
+			$("#NoData").show();
+			$("#WithData").hide();
+		});
+
+
+	</script>
+  </body>
+</html>
