@@ -63,7 +63,7 @@
 					<tr>
 						<td><input type="checkbox" id="Construction" ></input>Construction</td>
 						<td><input type="checkbox" id="Hunter" >Hunter</td>
-						<td>Total (Coming Soon)</td>
+						<td><input class="btn btn-primary" type="button" id="Total" value="Total"></td>
 					</tr>
 				</table>
 				<input class="btn btn-primary" type="button" id="all" value="Select All (Warning Slow)">
@@ -251,112 +251,107 @@
 			chart.draw(dataTable, options);
 		};
 
-		function loadSkills()
+		function loadSkills(isTotal)
 		{
 			//clear out array first
 			skills = [];
 			
-			if($("#Attack").prop("checked"))
+			if($("#Attack").prop("checked") || isTotal)
 			{
 				skills.push("Attack");
 			}
-			if($("#Strength").prop("checked"))
+			if($("#Strength").prop("checked") || isTotal)
 			{
 				skills.push("Strength");
 			}
-			if($("#Defence").prop("checked"))
+			if($("#Defence").prop("checked") || isTotal)
 			{
 				skills.push("Defence");
 			}
-			if($("#Ranged").prop("checked"))
+			if($("#Ranged").prop("checked") || isTotal)
 			{
 				skills.push("Ranged");
 			}
-			if($("#Prayer").prop("checked"))
+			if($("#Prayer").prop("checked") || isTotal)
 			{
 				skills.push("Prayer");
 			}
-			if($("#Magic").prop("checked"))
+			if($("#Magic").prop("checked") || isTotal)
 			{
 				skills.push("Magic");
 			}
-			if($("#Runecraft").prop("checked"))
+			if($("#Runecraft").prop("checked") || isTotal)
 			{
 				skills.push("Runecraft");
 			}
-			if($("#Hitpoints").prop("checked"))
+			if($("#Hitpoints").prop("checked") || isTotal)
 			{
 				skills.push("Hitpoints");
 			}
-			if($("#Crafting").prop("checked"))
+			if($("#Crafting").prop("checked") || isTotal)
 			{
 				skills.push("Crafting");
 			}
-			if($("#Mining").prop("checked"))
+			if($("#Mining").prop("checked") || isTotal)
 			{
 				skills.push("Mining");
 			}
-			if($("#Smithing").prop("checked"))
+			if($("#Smithing").prop("checked") || isTotal)
 			{
 				skills.push("Smithing");
 			}
-			if($("#Fishing").prop("checked"))
+			if($("#Fishing").prop("checked") || isTotal)
 			{
 				skills.push("Fishing");
 			}
-			if($("#Cooking").prop("checked"))
+			if($("#Cooking").prop("checked") || isTotal)
 			{
 				skills.push("Cooking");
 			}
-			if($("#Firemaking").prop("checked"))
+			if($("#Firemaking").prop("checked") || isTotal)
 			{
 				skills.push("Firemaking");
 			}
-			if($("#Woodcutting").prop("checked"))
+			if($("#Woodcutting").prop("checked") || isTotal)
 			{
 				skills.push("Woodcutting");
 			}
-			if($("#Agility").prop("checked"))
+			if($("#Agility").prop("checked") || isTotal)
 			{
 				skills.push("Agility");
 			}
-			if($("#Herblore").prop("checked"))
+			if($("#Herblore").prop("checked") || isTotal)
 			{
 				skills.push("Herblore");
 			}
-			if($("#Thieving").prop("checked"))
+			if($("#Thieving").prop("checked") || isTotal)
 			{
 				skills.push("Thieving");
 			}
-			if($("#Fletching").prop("checked"))
+			if($("#Fletching").prop("checked") || isTotal)
 			{
 				skills.push("Fletching");
 			}
-			if($("#Slayer").prop("checked"))
+			if($("#Slayer").prop("checked") || isTotal)
 			{
 				skills.push("Slayer");
 			}
-			if($("#Farming").prop("checked"))
+			if($("#Farming").prop("checked") || isTotal)
 			{
 				skills.push("Farming");
 			}
-			if($("#Construction").prop("checked"))
+			if($("#Construction").prop("checked") || isTotal)
 			{
 				skills.push("Construction");
 			}
-			if($("#Hunter").prop("checked"))
+			if($("#Hunter").prop("checked") || isTotal)
 			{
 				skills.push("Hunter");
 			}
-			if(jQuery.isEmptyObject(skills))
+			if(jQuery.isEmptyObject(skills) || isTotal)
 			{
 				skills.push("Runecraft");			
 			}
-			//for when we add total skill tracking
-			//if($("#Total").prop("checked"))
-			//{
-			//	skills.push("Total");
-			//}
 		}
 		function parseLine(incLine)
 		{
@@ -381,14 +376,14 @@
 			$("#WithData").hide();
 		});
 		
-		function graphPrep()
+		function graphPrep(loadAll)
 		{
 			//Swap between views and clean up spaces in data
 			$("#NoData").hide();
 			$("#WithData").show();
 			$('#UserData').val($('#UserData').val().replace(/ +(?= )/g,''));
 			
-			loadSkills();
+			loadSkills(loadAll);
 			
 			
 			//Do some basic filtering for lines that only have selected skills and explicitly remove the quests
@@ -414,14 +409,14 @@
 		}
 		
 		$( "#timeLine" ).click(function() {
-			var table = graphPrep();			
+			var table = graphPrep(false);			
 			$("#graphSpot").empty();
 			drawTimeLine(table);
 		});
 		
 		$( "#supplyData" ).click(function() {
 			$("#graphSpot").empty();
-			var table = graphPrep();
+			var table = graphPrep(false);
 			
 					
 			//create first row for data headers and second row for initial account guess
@@ -549,7 +544,84 @@
 				$("#Hitpoints").prop("checked", true);
 				$("#Ranged").prop("checked", true);
 		});
+		$( "#Total" ).click(function() {
+			$("#graphSpot").empty();
+			var table = graphPrep(true);
+			
+			var lastRecord = {
+			"Attack" : 1,
+			"Mining" : 1,
+			"Strength" : 1,
+			"Agility" : 1,
+			"Smithing" : 1,
+			"Defence" : 1,
+			"Herblore" : 1,
+			"Fishing" : 1,
+			"Ranged" : 1,
+			"Thieving" : 1,
+			"Cooking" : 1,
+			"Prayer" : 1,
+			"Crafting" : 1,
+			"Firemaking" : 1,
+			"Magic" : 1,
+			"Fletching" : 1,
+			"Woodcutting" : 1,
+			"Runecraft" : 1,
+			"Slayer" : 1,
+			"Farming" : 1,
+			"Construction" : 1,
+			"Hunter" : 1};
+			
+			var graphableData = [];
+			var firstRow = [];
+			firstRow.push('Time');
+			if($("#level").prop("checked"))
+			{
+				firstRow.push("Total Level");
+			}
+			else
+			{
+				firstRow.push("Experience");
+			}
+			var secondRow = [];
+			secondRow.push(new Date(table[0][0] - 6000000));
+			if($("#level").prop("checked"))
+			{
+				secondRow.push(32);
+				lastRecord["Hitpoints"] = 10;
+			}
+			else
+			{				
+				secondRow.push(22 + parseInt(xpPerLevel[10]));
+				lastRecord["Hitpoints"] = parseInt(xpPerLevel[10]);
+			}			
+			
+			graphableData.push(firstRow);
+			graphableData.push(secondRow);	
+			
+			console.log(graphableData);
+			//restructuring of data to fit into line chart
+			for(var i = 0; i < table.length - 2;i++)
+			{
+				var temp = graphableData[i + 1].slice();
+				if($("#level").prop("checked"))
+				{
+					temp[1] += parseInt(table[i][2]) - lastRecord[table[i][1]];
+					lastRecord[table[i][1]] = parseInt(table[i][2]);
+				}
+				else
+				{
+					temp[1] += parseInt(xpPerLevel[table[i][2]]) - lastRecord[table[i][1]];
+					lastRecord[table[i][1]] = parseInt(xpPerLevel[table[i][2]]);
+				}
+				temp[0] = table[i][0];
+				graphableData.push(temp);
+			}
+			
+			
+			google.charts.setOnLoadCallback(drawChart(graphableData));
 				
+		});
 
 	</script>
   </body>
